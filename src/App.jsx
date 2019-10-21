@@ -1,26 +1,51 @@
-import React, { useReducer } from "react";
-import { HashRouter as Router, Link } from "react-router-dom";
-// import { BrowserRouter as Router, Link } from "react-router-dom";
+import React, { useReducer, useEffect } from "react";
+import { HashRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router } from "react-router-dom";
 import RouteView from "./router.jsx";
 import { reduxContext, reducer } from "./store.js";
 
+import Navbar from "./components/Navbar.jsx";
+import Alert from "./components/Alert.jsx";
+
 function App() {
-  const initStore = { info: "heihei" };
+  const local = Object.keys(localStorage).map(item => {
+    return { from: item, to: localStorage.getItem(item) };
+  });
+  const initStore = {
+    list: { local },
+    input: "hello",
+    output: "",
+    store: "local",
+    has: false,
+    alertList: []
+  };
   const store = {};
   Object.keys(initStore).forEach(item => {
     const [value, dispatch] = useReducer(reducer, initStore[item]);
     store[item] = { value, dispatch };
   });
 
+  useEffect(() => {
+    fetch(`http://203.195.141.131:3100/database/`)
+      .then(res => res.json())
+      .then(msg => {
+        const newList = Object.assign({}, store.list.value);
+        newList.public = msg;
+        const action = {
+          type: "UPDATE",
+          value: newList
+        };
+        store.list.dispatch(action);
+      });
+  }, []);
+
   return (
     <reduxContext.Provider value={store}>
       <Router>
-        <Link to="/home">home</Link>
-        <span> || </span>
-        <Link to="/other">other</Link>
+        <Navbar></Navbar>
         <RouteView></RouteView>
-        {/* <RouteView {...this.props} /> 子路由 */}
       </Router>
+      <Alert></Alert>
     </reduxContext.Provider>
   );
 }

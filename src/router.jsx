@@ -1,55 +1,28 @@
 import { Route, Switch, Redirect } from "react-router-dom";
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 
-import Home from "./components/Home.jsx";
-import Other from "./components/Other.jsx";
-import Child from "./components/Child.jsx";
-
-// const routes = [
-//   {
-//     path: "/",
-//     exact: true,
-//     redirect: "/home"
-//   },
-//   {
-//     path: "/home",
-//     component: Home
-//   },
-//   {
-//     path: "/other",
-//     component: Other,
-//     children: [
-//       {
-//         path: "child",
-//         component: Child
-//       }
-//     ]
-//   }
-// ];
+// import Home from "./components/Home.jsx";
+// import Other from "./components/Other.jsx";
+// import Child from "./components/Child.jsx";
+import Main from "./components/Main.jsx";
+import Table from "./components/Table.jsx";
 
 function RouteView({ match, children }) {
   const fullRoutes = [
     {
       path: "/",
       exact: true,
-      redirect: "/home"
+      redirect: "/main"
     },
     {
-      path: "/home",
-      component: Home
+      path: "/main",
+      component: Main
     },
     {
-      path: "/other",
-      component: Other,
-      children: [
-        {
-          path: "child",
-          component: Child
-        }
-      ]
+      path: "/table",
+      component: Table
     }
   ];
-
   const [routes, setRoutes] = useState(children || fullRoutes);
   const [url, setUrl] = useState(match ? `${match.url}/` : "");
 
@@ -57,7 +30,7 @@ function RouteView({ match, children }) {
     <Switch>
       {routes.map((item, key) => {
         function routeRender(props) {
-          children = item.children || null;
+          props.children = item.children || null;
           if (item.redirect) return <Redirect to={item.redirect} />;
           else return <item.component {...props} />;
         }
@@ -74,18 +47,5 @@ function RouteView({ match, children }) {
     </Switch>
   );
 }
-
-// class RouteView extends Component {
-//   constructor({ match, children }) {
-//     super();
-//     this.state = {
-//       routes: children || routes,
-//       url: match ? `${match.url}/` : ""
-//     };
-//   }
-//   render() {
-
-//   }
-// }
 
 export default RouteView;

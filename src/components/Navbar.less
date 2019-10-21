@@ -1,0 +1,58 @@
+.navbar {
+  background: rgba(cyan, 0.7);
+  border-radius: 16px;
+  box-shadow: 2px 2px 6px 0 #666;
+  padding-left: 36px;
+  margin-top: 30px;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      display: inline-block;
+      position: relative;
+      font-size: 20px;
+      text-shadow: 1px 1px 4px #999;
+
+      &:hover > a,
+      &:hover > span {
+        background: rgba(81, 81, 81, 0.2);
+      }
+      &:hover ul {
+        opacity: 1;
+        visibility: visible;
+      }
+      a,
+      span {
+        text-decoration: none;
+        color: #333;
+        line-height: 50px;
+        padding: 0 18px;
+        display: block;
+        transition: all ease 0.3s;
+        text-align: center;
+        cursor: pointer;
+      }
+      ul {
+        overflow: hidden;
+        width: 100%;
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        background: cyan;
+        border-radius: 0 0 16px 0;
+        box-shadow: 2px 2px 6px 0 #666;
+        transition: all ease 0.2s;
+
+        li {
+          width: 100%;
+        }
+        li + li {
+          border-top: 1px #aaa solid;
+        }
+      }
+    }
+  }
+}

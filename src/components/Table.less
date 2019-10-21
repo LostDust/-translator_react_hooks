@@ -1,0 +1,43 @@
+.table {
+  width: 90%;
+  min-width: 500px;
+  margin: 32px auto;
+
+  table {
+    box-shadow: 2px 2px 6px 0 #666;
+    border-radius: 6px;
+    table-layout: fixed;
+    width: 100%;
+    overflow: hidden;
+
+    tr {
+      td {
+        padding: 10px 14px;
+
+        img {
+          margin-bottom: -3px;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+        &:nth-child(1) {
+          width: 10%;
+        }
+        &:nth-child(2),
+        &:nth-child(3) {
+          width: 25%;
+        }
+        &:nth-child(4) {
+          width: 18%;
+        }
+      }
+    }
+    thead tr,
+    tbody tr:nth-child(even) {
+      background: rgba(cyan, 0.2);
+    }
+    thead td {
+      font-weight: bold;
+    }
+  }
+}
