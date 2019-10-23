@@ -3,17 +3,17 @@ import styles from "./Translate.less";
 import { reduxContext } from "../store.js";
 
 function Translate() {
-  const { input, output, has, list, store } = useContext(reduxContext);
+  const { input, output, list, store, dispatch } = useContext(reduxContext);
 
   const [fromType, setFromType] = useState("英文");
   const [toType, setToType] = useState("中文");
 
-  function changeStore(e, key, value) {
+  function changeStore(e, key) {
     const action = {
       type: "UPDATE",
       value: e.target.value
     };
-    value.dispatch(action);
+    dispatch[key](action);
   }
   function changeValue(e, key) {
     eval(`set${key}("${e.target.value}")`);
@@ -36,17 +36,17 @@ function Translate() {
         to = "en";
     }
     fetch(
-      `http://203.195.141.131:3100/api?q=${input.value}&from=${from}&to=${to}`
+      `http://203.195.141.131:3100/api?q=${input}&from=${from}&to=${to}`
     )
       .then(res => res.text())
       .then(msg => {
-        output.dispatch({ type: "UPDATE", value: msg });
+        dispatch.output({ type: "UPDATE", value: msg });
       });
 
-    const result = list.value[store.value].some(item => {
-      return item.from == input.value;
+    const result = list[store].some(item => {
+      return item.from == input;
     });
-    has.dispatch({
+    dispatch.has({
       type: "UPDATE",
       value: result ? true : false
     });
@@ -56,8 +56,8 @@ function Translate() {
     <section className={styles.translate}>
       <textarea
         rows="4"
-        value={input.value}
-        onChange={e => changeStore(e, "input", input)}
+        value={input}
+        onChange={e => changeStore(e, "input")}
       ></textarea>
       <div id={styles["form-group"]}>
         <div>
@@ -80,8 +80,8 @@ function Translate() {
       </div>
       <textarea
         rows="4"
-        value={output.value}
-        onChange={e => changeStore(e, "output", output)}
+        value={output}
+        onChange={e => changeStore(e, "output")}
       ></textarea>
     </section>
   );

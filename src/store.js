@@ -26,4 +26,16 @@ function reducer(state, action) {
   }
 }
 
-export { reduxContext, reducer };
+const local = Object.keys(localStorage).map(item => {
+  return { from: item, to: localStorage.getItem(item) };
+});
+const initStore = {
+  list: { local },
+  input: "hello",
+  output: "",
+  store: "local",
+  has: false,
+  alertList: []
+};
+
+export { reduxContext, reducer, initStore };

@@ -8,7 +8,7 @@ function Alert() {
   return (
     <section className={styles.alert}>
       <ul>
-        {alertList.value.map(item => {
+        {alertList.map(item => {
           return (
             <li key={item.id}>
               <p>{item.content}</p>

@@ -3,7 +3,7 @@ import styles from "./Table.less";
 import { reduxContext } from "../store.js";
 
 function Table(props) {
-  const { list, alertList } = useContext(reduxContext);
+  const { list, alertList, dispatch } = useContext(reduxContext);
   const nowStore = props.location.search.slice(1).split("=")[1];
 
   function play(index) {
@@ -15,25 +15,25 @@ function Table(props) {
     ).style.visibility = "hidden";
   }
   function removeItem(index) {
-    const newList = Object.assign({}, list.value);
+    const newList = Object.assign({}, list);
     const spliceItem = newList[nowStore].splice(index, 1);
-    list.dispatch({
+    dispatch.list({
       type: "UPDATE",
       value: newList
     });
     if (nowStore === "local") localStorage.removeItem(spliceItem[0].from);
 
     const id = new Date().getTime();
-    const newAlert = Object.assign([], alertList.value);
+    const newAlert = Object.assign([], alertList);
     newAlert.push({ content: "删除成功", id });
-    alertList.dispatch({
+    dispatch.alertList({
       type: "UPDATE",
       value: newAlert
     });
     setTimeout(() => {
-      const newAlert = Object.assign([], alertList.value);
+      const newAlert = Object.assign([], alertList);
       newAlert.shift();
-      alertList.dispatch({
+      dispatch.alertList({
         type: "UPDATE",
         value: newAlert
       });
@@ -55,8 +55,8 @@ function Table(props) {
           </tr>
         </thead>
         <tbody>
-          {list.value[nowStore] &&
-            list.value[nowStore].map((item, index) => {
+          {list[nowStore] &&
+            list[nowStore].map((item, index) => {
               return (
                 <tr key={item.from}>
                   <td>{index + 1}</td>

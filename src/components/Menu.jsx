@@ -3,41 +3,40 @@ import styles from "./Menu.less";
 import { reduxContext } from "../store.js";
 
 function Menu() {
-  const { store, has, input, output, list, alertList } = useContext(
+  const { store, has, input, output, list, alertList, dispatch } = useContext(
     reduxContext
   );
 
   function changeStore(e, key) {
-    key.dispatch({ type: "UPDATE", value: e.target.value });
+    dispatch[key]({ type: "UPDATE", value: e.target.value });
 
-    const result = list.value[e.target.value].some(item => {
-      return item.from == input.value;
+    const result = list[e.target.value].some(item => {
+      return item.from == input;
     });
-    has.dispatch({ type: "UPDATE", value: result ? true : false });
+    dispatch.has({ type: "UPDATE", value: result ? true : false });
   }
   function addItem() {
-    if (!input.value || !output.value) return;
-    if (has.value) return;
+    if (!input || !output) return;
+    if (has) return;
 
-    const newList = Object.assign({}, list.value);
-    newList[store.value].push({ from: input.value, to: output.value });
-    list.dispatch({
+    const newList = Object.assign({}, list);
+    newList[store].push({ from: input, to: output });
+    dispatch.list({
       type: "UPDATE",
       value: newList,
-      save: store.value === "public"
+      save: store === "public"
     });
-    if (store.value === "local")
-      localStorage.setItem(input.value, output.value);
-    has.dispatch({ type: "UPDATE", value: true });
+    if (store === "local") localStorage.setItem(input, output);
+    dispatch.has({ type: "UPDATE", value: true });
 
     const id = new Date().getTime();
-    const newAlert = Object.assign([], alertList.value);
+    const newAlert = Object.assign([], alertList);
     newAlert.push({ content: "添加成功", id });
-    alertList.dispatch({ type: "UPDATE", value: newAlert });
+    dispatch.alertList({ type: "UPDATE", value: newAlert });
     setTimeout(() => {
-      const newAlert = Object.assign([], alertList.value);
+      const newAlert = Object.assign([], alertList);
       newAlert.shift();
-      alertList.dispatch({ type: "UPDATE", value: newAlert });
+      dispatch.alertList({ type: "UPDATE", value: newAlert });
     }, 2000);
   }
 
@@ -48,7 +47,7 @@ function Menu() {
           <span>收藏到</span>
         </li>
         <li>
-          <select value={store.value} onChange={e => changeStore(e, store)}>
+          <select value={store} onChange={e => changeStore(e, "store")}>
             <option>public</option>
             <option>local</option>
           </select>
@@ -56,7 +55,7 @@ function Menu() {
         <li>
           <img
             src={`http://203.195.141.131:3100/static/png/star${
-              has.value ? "-active" : ""
+              has ? "-active" : ""
             }.png`}
             onClick={addItem}
           />
