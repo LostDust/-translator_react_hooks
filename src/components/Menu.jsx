@@ -6,24 +6,14 @@ function Menu() {
   const { store, has, input, output, list, alertList } = useContext(
     reduxContext
   );
-  console.log(list);
-
 
   function changeStore(e, key) {
-    const action = {
-      type: "UPDATE",
-      value: e.target.value
-    };
-    key.dispatch(action);
+    key.dispatch({ type: "UPDATE", value: e.target.value });
 
-    console.log(list.value);
     const result = list.value[e.target.value].some(item => {
       return item.from == input.value;
     });
-    has.dispatch({
-      type: "UPDATE",
-      value: result ? true : false
-    });
+    has.dispatch({ type: "UPDATE", value: result ? true : false });
   }
   function addItem() {
     if (!input.value || !output.value) return;
@@ -31,7 +21,13 @@ function Menu() {
 
     const newList = Object.assign({}, list.value);
     newList[store.value].push({ from: input.value, to: output.value });
-    list.dispatch({ type: "UPDATE", value: newList });
+    list.dispatch({
+      type: "UPDATE",
+      value: newList,
+      save: store.value === "public"
+    });
+    if (store.value === "local")
+      localStorage.setItem(input.value, output.value);
     has.dispatch({ type: "UPDATE", value: true });
 
     const id = new Date().getTime();

@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 const reduxContext = createContext();
 
-function publicSave(list, info) {
+function publicSave(list) {
   fetch(`http://203.195.141.131:3100/save/`, {
     method: "POST",
     body: JSON.stringify(list.public),
@@ -17,8 +17,9 @@ function publicSave(list, info) {
 function reducer(state, action) {
   switch (action.type) {
     case "UPDATE":
-      // if (action.value === "list") alertInfo(action.msg);
-      // if (action.value === "list") publicSave(state, action.msg);
+      if (action.save) {
+        publicSave(state);
+      }
       return action.value;
     default:
       return state;

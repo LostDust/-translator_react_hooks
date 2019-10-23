@@ -44,8 +44,8 @@ function App() {
       <Router>
         <Navbar></Navbar>
         <RouteView></RouteView>
+        <Alert></Alert>
       </Router>
-      <Alert></Alert>
     </reduxContext.Provider>
   );
 }

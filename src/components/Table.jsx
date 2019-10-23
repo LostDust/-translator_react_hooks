@@ -16,11 +16,12 @@ function Table(props) {
   }
   function removeItem(index) {
     const newList = Object.assign({}, list.value);
-    newList[nowStore].splice(index, 1);
+    const spliceItem = newList[nowStore].splice(index, 1);
     list.dispatch({
       type: "UPDATE",
       value: newList
     });
+    if (nowStore === "local") localStorage.removeItem(spliceItem[0].from);
 
     const id = new Date().getTime();
     const newAlert = Object.assign([], alertList.value);
